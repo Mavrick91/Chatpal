@@ -5,14 +5,18 @@ import logoChatPal from "../../assets/logo_chat_pal.png"
 import Button from "../../components/Button"
 import { useUserInfo } from "../../context/UserInfoProvider"
 import ROUTES from "../../routes/constants"
-import { LoginResponse } from "../../types/facebook"
+import { FacebookLoginResponse } from "../../types/facebook"
 
 const Login = () => {
 	const { setUserInfo } = useUserInfo()
 
 	const handleLogin = useCallback(() => {
-		window.FB.login((response: LoginResponse) => {
-			setUserInfo((prev) => ({ ...prev, ...response }))
+		window.FB.login((response: FacebookLoginResponse) => {
+			if (response.status === "connected")
+				setUserInfo((prev) => ({
+					...prev,
+					facebook: { ...response, verified: true },
+				}))
 		})
 	}, [setUserInfo])
 

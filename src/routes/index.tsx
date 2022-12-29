@@ -12,13 +12,20 @@ import TermsOfService from "../screens/TermsOfService/TermsOfService"
 import { LoginStatus } from "../types/facebook"
 
 import ROUTES from "./constants"
+import { useUserInfo } from "../context/UserInfoProvider"
 
 const Router = () => {
+	const { userInfo, setUserInfo } = useUserInfo()
 	const isAuth = false
 
-	window.FB.getLoginStatus((response: LoginStatus) => {
-		console.log("🚀 ~ response", response)
-	})
+	if (!userInfo.facebook.verified) {
+		window.FB.getLoginStatus((response: LoginStatus) => {
+			setUserInfo((prev) => ({
+				...prev,
+				facebook: { ...response, verified: true },
+			}))
+		})
+	}
 
 	const routes = useMemo(
 		() =>

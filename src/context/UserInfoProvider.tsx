@@ -1,38 +1,52 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useMemo, useState } from "react";
+import {
+	createContext,
+	Dispatch,
+	ReactNode,
+	SetStateAction,
+	useContext,
+	useMemo,
+	useState,
+} from "react"
 
-import { LoginResponse } from "../types/facebook";
+import { FacebookLoginResponse } from "../types/facebook"
 
 type UserInfo = {
-  userInfo: Partial<LoginResponse>;
-  setUserInfo: Dispatch<SetStateAction<Partial<LoginResponse>>>;
-};
+	facebook: Partial<FacebookLoginResponse> & { verified: boolean }
+}
 
-const ApiContext = createContext<UserInfo | null>(null);
+type ProviderContext = {
+	userInfo: UserInfo
+	setUserInfo: Dispatch<SetStateAction<UserInfo>>
+}
+
+const ApiContext = createContext<ProviderContext | null>(null)
 
 type Props = {
-  children: ReactNode;
-};
+	children: ReactNode
+}
 
 const UserInfoProvider = ({ children }: Props) => {
-  const [userInfo, setUserInfo] = useState({});
+	const [userInfo, setUserInfo] = useState<UserInfo>({
+		facebook: { verified: false },
+	})
 
-  const userInfoValue = useMemo(
-    () => ({
-      userInfo,
-      setUserInfo,
-    }),
-    [userInfo]
-  );
+	const value = useMemo(
+		() => ({
+			userInfo,
+			setUserInfo,
+		}),
+		[userInfo]
+	)
 
-  return <ApiContext.Provider value={userInfoValue}>{children}</ApiContext.Provider>;
-};
+	return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>
+}
 
 export const useUserInfo = () => {
-  const context = useContext(ApiContext);
-  if (context === null) {
-    throw new Error("useUserInfo must be used within a UserInfoProvider");
-  }
-  return context;
-};
+	const context = useContext(ApiContext)
+	if (context === null) {
+		throw new Error("useUserInfo must be used within a UserInfoProvider")
+	}
+	return context
+}
 
-export default UserInfoProvider;
+export default UserInfoProvider
