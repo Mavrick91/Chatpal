@@ -2,7 +2,11 @@
   "name": "chatpal",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.11.0",
+    "@tanstack/react-query": "^4.20.4",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -10,10 +14,16 @@
     "@types/node": "^16.18.11",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.10",
+    "axios": "^1.2.1",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
+    "socket.io-client": "^4.5.4",
     "typescript": "^4.9.4",
+    "uuid": "^9.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -28,6 +38,24 @@
       "react-app/jest"
     ]
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write"
+    ]
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules//"
+    ]
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -39,5 +67,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.7",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.18.6",
+    "@types/moxios": "^0.4.15",
+    "@types/uuid": "^9.0.0",
+    "moxios": "^0.4.0",
+    "prettier": "^2.8.1",
+    "tailwindcss": "^3.2.4"
   }
 }
